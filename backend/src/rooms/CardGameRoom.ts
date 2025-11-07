@@ -31,8 +31,11 @@ export class CardGameRoom extends Room<MyRoomState> {
     this.setState(new MyRoomState());
     this.state.deck = new ArraySchema(...generateShuffleDeck());
     this.state.gameState = 'waiting';
+
+    // Generate gameKey and set as roomId
     this.gameKey = generateGameKey();
-    gameKeyToRoomId[this.gameKey] = this.roomId;
+    this.roomId = this.gameKey; // Use gameKey as the room ID
+    this.state.gameKey = this.gameKey; // Also store in state for clients
 
     //this.state.numPlayers = options.numPlayers;
     this.state.numBots = options.numBots;
@@ -60,7 +63,7 @@ export class CardGameRoom extends Room<MyRoomState> {
     //   this.state.bots.set(uniqueBotID, botPlayer);
     // }
 
-    // For demonstration purposes, let's deal 5 cards to each player upon room creation
+    // For demonstration purposes, let's deal 5 cards to each player upon room creation'
     dealCards(players, 6);
   }
 

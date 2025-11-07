@@ -2,9 +2,6 @@ import config from '@colyseus/tools';
 import { monitor } from '@colyseus/monitor';
 import { playground } from '@colyseus/playground';
 
-/**
- * Import your Room files
- */
 import { CardGameRoom } from './rooms/CardGameRoom';
 
 export default config({
@@ -12,7 +9,9 @@ export default config({
     /**
      * Define your room handlers:
      */
-    gameServer.define('card_game', CardGameRoom);
+    gameServer.define('card_game', CardGameRoom, {
+      filterBy: ['gameState'],
+    });
   },
 
   initializeExpress: (app) => {

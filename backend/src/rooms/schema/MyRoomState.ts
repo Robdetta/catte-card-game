@@ -2,6 +2,9 @@ import { Schema, MapSchema, type, ArraySchema } from '@colyseus/schema';
 import { Player } from '../Player';
 
 export class MyRoomState extends Schema {
+  @type('string')
+  gameKey: string = '';
+
   @type('number')
   numPlayers: number = 0;
 
