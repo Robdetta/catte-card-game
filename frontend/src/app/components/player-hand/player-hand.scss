@@ -1,0 +1,63 @@
+.player-hand {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.my-hand {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 12px;
+}
+
+.card-slot {
+  background-repeat: no-repeat;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: translateY(-12px);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  &.face-down {
+    filter: brightness(0.95);
+
+    &:hover {
+      filter: brightness(1);
+    }
+  }
+
+  &.face-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.card-back-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .my-hand {
+    gap: 6px;
+
+    .card-slot {
+      transform: scale(0.85);
+    }
+  }
+}

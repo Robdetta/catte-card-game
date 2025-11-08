@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ColyseusService } from '../../services/colyseus';
 import { PlayerSlotComponent } from '../player-slot/player-slot';
+import { PlayerHand } from '../player-hand/player-hand';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, FormsModule, PlayerSlotComponent],
+  imports: [CommonModule, FormsModule, PlayerSlotComponent, PlayerHand],
   templateUrl: './game.html',
   styleUrls: ['./game.scss'],
 })
@@ -21,11 +22,12 @@ export class GameComponent implements OnInit, OnDestroy {
   usernameSet: boolean = false;
   currentTurnPlayerId: string | null = null;
   currentPlayerSessionId: string | null = null;
+  myHand: string[] = [];
   playedCards: any[] = [];
   notifications: string[] = [];
-  myHand: string[] = [];
 
   private destroy$ = new Subject<void>();
+  private room: any;
 
   constructor(
     private colyseusService: ColyseusService,
@@ -47,6 +49,8 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   private initializeGame(): void {
+    this.room = this.colyseusService.getRoom();
+
     // Subscribe to game state changes
     this.colyseusService.roomState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state) {
@@ -57,6 +61,13 @@ export class GameComponent implements OnInit, OnDestroy {
     // Subscribe to players
     this.colyseusService.players$.pipe(takeUntil(this.destroy$)).subscribe((players) => {
       this.players = players || [];
+      // Update my hand if I'm in the players array
+      if (this.players.length > 0 && this.room) {
+        const myPlayer = this.players.find((p) => p.id === this.room.sessionId);
+        if (myPlayer && myPlayer.hand) {
+          this.myHand = Array.from(myPlayer.hand);
+        }
+      }
     });
   }
 
@@ -65,10 +76,8 @@ export class GameComponent implements OnInit, OnDestroy {
       this.currentTurnPlayerId = state.currentTurnPlayerId;
     }
 
-    if (state.gameState) {
-      if (state.gameState === 'playing') {
-        this.addNotification('Game has started!');
-      }
+    if (state.gameState === 'playing') {
+      this.addNotification('Game has started!');
     }
   }
 
@@ -78,10 +87,8 @@ export class GameComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const room = this.colyseusService.getRoom();
-    if (room) {
-      // Send username to backend
-      room.send('setUsername', { username: this.username });
+    if (this.room) {
+      this.room.send('setUsername', { username: this.username });
       this.usernameSet = true;
       this.addNotification(`Your name is now: ${this.username}`);
     }

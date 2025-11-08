@@ -1,0 +1,12 @@
+<div class="player-hand" [class.my-hand]="isMyHand">
+  <!-- Show face cards if it's my hand, otherwise show card backs -->
+  <div
+    *ngFor="let card of cards; let i = index"
+    class="card-slot"
+    [class.face-card]="isMyHand && card"
+    [class.face-down]="!isMyHand"
+    [ngStyle]="isMyHand ? getCardStyle(card) : getCardBackStyle()"
+  >
+    <div *ngIf="!isMyHand && card" class="card-back-overlay"></div>
+  </div>
+</div>
