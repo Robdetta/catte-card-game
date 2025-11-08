@@ -30,6 +30,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private room: any;
+  private notificationTimers: Map<string, any> = new Map();
 
   constructor(
     private colyseusService: ColyseusService,
@@ -47,6 +48,8 @@ export class GameComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    // Clear all notification timers
+    this.notificationTimers.forEach((timer) => clearTimeout(timer));
     this.colyseusService.leaveRoom();
   }
 
@@ -54,26 +57,28 @@ export class GameComponent implements OnInit, OnDestroy {
     this.room = this.colyseusService.getRoom();
     this.currentPlayerSessionId = this.room?.sessionId;
 
-    // Subscribe to game state changes
     this.colyseusService.roomState$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
       if (state) {
         this.updateGameState(state);
       }
     });
 
-    // Subscribe to players
     this.colyseusService.players$.pipe(takeUntil(this.destroy$)).subscribe((players) => {
       this.players = players || [];
 
-      // Update my hand
+      console.log('👥 Players updated:', this.players.length);
+      this.players.forEach((p, i) => {
+        console.log(`  Player ${i}: ${p.name} - Hand:`, p.hand);
+      });
+
       if (this.players.length > 0 && this.room) {
         const myPlayer = this.players.find((p) => p.id === this.room.sessionId);
         if (myPlayer && myPlayer.hand) {
           this.myHand = Array.from(myPlayer.hand);
+          console.log('🎴 My hand:', this.myHand);
         }
       }
 
-      // Update current turn player name
       this.updateCurrentTurnPlayerName();
     });
   }
@@ -121,9 +126,27 @@ export class GameComponent implements OnInit, OnDestroy {
 
   addNotification(message: string): void {
     this.notifications.unshift(message);
+
+    // Keep only last 5 notifications
     if (this.notifications.length > 5) {
-      this.notifications.pop();
+      const removed = this.notifications.pop();
+      // Clear any existing timer for this notification
+      if (removed && this.notificationTimers.has(removed)) {
+        clearTimeout(this.notificationTimers.get(removed));
+        this.notificationTimers.delete(removed);
+      }
     }
+
+    // Auto-remove notification after 5 seconds
+    const timer = setTimeout(() => {
+      const index = this.notifications.indexOf(message);
+      if (index > -1) {
+        this.notifications.splice(index, 1);
+      }
+      this.notificationTimers.delete(message);
+    }, 5000);
+
+    this.notificationTimers.set(message, timer);
   }
 
   leaveGame(): void {
