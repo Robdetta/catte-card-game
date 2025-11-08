@@ -1,10 +1,18 @@
 import config from '@colyseus/tools';
 import { monitor } from '@colyseus/monitor';
 import { playground } from '@colyseus/playground';
+import * as dotenv from 'dotenv';
 
 import { CardGameRoom } from './rooms/CardGameRoom';
 
+// Load environment variables
+dotenv.config();
+
 export default config({
+  options: {
+    devMode: process.env.NODE_ENV !== 'production',
+  },
+
   initializeGameServer: (gameServer) => {
     /**
      * Define your room handlers:
@@ -15,6 +23,14 @@ export default config({
   },
 
   initializeExpress: (app) => {
+    // CORS configuration
+    app.use((req, res, next) => {
+      res.header('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*');
+      res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type');
+      next();
+    });
+
     /**
      * Bind your custom express routes here:
      * Read more: https://expressjs.com/en/starter/basic-routing.html
@@ -40,8 +56,8 @@ export default config({
   },
 
   beforeListen: () => {
-    /**
-     * Before before gameServer.listen() is called.
-     */
+    console.log(`🎮 Server running in ${process.env.NODE_ENV || 'development'} mode`);
+    console.log(`🌐 Port: ${process.env.PORT || 2567}`);
+    console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
   },
 });

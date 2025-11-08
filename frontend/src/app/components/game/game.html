@@ -1,1 +1,76 @@
-<p>game works!</p>
+<div class="game-room-container">
+  <!-- Header -->
+  <div class="game-header">
+    <div class="header-left">
+      <h1>🎴 Card Game</h1>
+      <div class="room-info">
+        <span class="info-item"
+          >PIN: <strong>{{ gameKey }}</strong></span
+        >
+      </div>
+    </div>
+
+    <div class="header-center">
+      <div class="turn-display" *ngIf="currentTurnPlayerId">
+        <span class="turn-label">Current Turn:</span>
+        <span class="turn-player">Player</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button (click)="leaveGame()" class="btn btn-leave">Leave Game</button>
+    </div>
+  </div>
+
+  <!-- Main Game Area -->
+  <div class="game-area">
+    <!-- Player Circle -->
+    <div class="players-circle">
+      <app-player-slot
+        *ngFor="let player of players; let i = index"
+        [player]="player"
+        [position]="getPositionForIndex(i)"
+        [isCurrentTurn]="isCurrentTurn(player.id)"
+        [isMainPlayer]="i === 0"
+      ></app-player-slot>
+    </div>
+
+    <!-- Center Area -->
+    <div class="center-area">
+      <div class="played-cards">
+        <h3>Played Cards</h3>
+        <div class="cards-grid">
+          <!-- Cards will appear here -->
+          <p class="empty-state">No cards played yet</p>
+        </div>
+      </div>
+
+      <div class="notifications-panel">
+        <h3>Game Log</h3>
+        <div class="notifications">
+          <div *ngFor="let notif of notifications" class="notification">
+            {{ notif }}
+          </div>
+          <div *ngIf="notifications.length === 0" class="empty-state">
+            Waiting for game events...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Username Input (if not set) -->
+  <div class="username-modal" *ngIf="!username">
+    <div class="modal-content">
+      <h2>Enter Your Name</h2>
+      <input
+        type="text"
+        [(ngModel)]="username"
+        placeholder="Enter your username"
+        class="username-input"
+        (keyup.enter)="setUsername()"
+      />
+      <button (click)="setUsername()" class="btn btn-primary">Set Name</button>
+    </div>
+  </div>
+</div>

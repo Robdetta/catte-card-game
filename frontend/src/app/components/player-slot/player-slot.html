@@ -1,0 +1,32 @@
+<div
+  class="player-slot"
+  [class]="'position-' + position"
+  [class.main-player]="isMainPlayer"
+  [class.current-turn]="isCurrentTurn"
+>
+  <div class="player-card">
+    <!-- Avatar -->
+    <div class="player-avatar">
+      <div class="avatar-placeholder">{{ player?.name?.charAt(0).toUpperCase() || '?' }}</div>
+    </div>
+
+    <!-- Player Info -->
+    <div class="player-info">
+      <h3 class="player-name">{{ player?.name || 'Empty Slot' }}</h3>
+      <p class="player-status" [class]="player?.isReady ? 'ready' : 'waiting'">
+        {{ playerStatus }}
+      </p>
+    </div>
+
+    <!-- Cards Count -->
+    <div class="cards-count">
+      <span class="card-icon">🃏</span>
+      <span class="count">{{ cardsCount }}</span>
+    </div>
+
+    <!-- Turn Indicator -->
+    <div *ngIf="isCurrentTurn" class="turn-indicator">
+      <span class="turn-badge">YOUR TURN</span>
+    </div>
+  </div>
+</div>

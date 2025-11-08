@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as Colyseus from 'colyseus.js';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,8 @@ export class ColyseusService {
   roomState$ = this.roomStateSubject.asObservable();
 
   constructor() {
-    this.client = new Colyseus.Client('ws://localhost:2567');
+    this.client = new Colyseus.Client(environment.wsUrl);
+    console.log('Colyseus client initialized with URL:', environment.wsUrl);
   }
 
   async createRoom(numPlayers: number, numBots: number): Promise<string> {
