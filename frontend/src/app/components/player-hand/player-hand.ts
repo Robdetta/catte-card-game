@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardService } from '../../services/CardService';
 
@@ -7,9 +7,9 @@ import { CardService } from '../../services/CardService';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './player-hand.html',
-  styleUrl: './player-hand.scss',
+  styleUrls: ['./player-hand.scss'],
 })
-export class PlayerHand implements OnInit, OnChanges {
+export class PlayerHandComponent implements OnInit, OnChanges {
   @Input() cardIds: string[] = [];
   @Input() isMyHand: boolean = false;
 
@@ -27,16 +27,21 @@ export class PlayerHand implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(): void {
-    if (this.cardsLoaded) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['cardIds'] && this.cardsLoaded) {
       this.loadCards();
     }
   }
 
   private loadCards(): void {
-    this.cards = this.cardIds.map((cardId) => {
-      return this.cardService.getCard(cardId);
-    });
+    if (!this.cardIds || this.cardIds.length === 0) {
+      this.cards = [];
+      return;
+    }
+
+    this.cards = this.cardIds
+      .map((cardId) => this.cardService.getCard(cardId))
+      .filter((card) => card !== undefined);
   }
 
   getCardStyle(card: any) {
@@ -56,9 +61,14 @@ export class PlayerHand implements OnInit, OnChanges {
   }
 
   getCardBackStyle() {
-    // Show back card
     const backCard = this.cardService.getCard('back');
-    if (!backCard || !backCard.frame) return {};
+    if (!backCard || !backCard.frame) {
+      return {
+        width: '140px',
+        height: '190px',
+        background: '#667eea',
+      };
+    }
 
     const frame = backCard.frame;
     const atlasWidth = this.cardService.getAtlasWidth();

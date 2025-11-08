@@ -79,10 +79,39 @@
   }
 }
 
+// CURRENT TURN HIGHLIGHT
 .current-turn .player-card {
   border: 3px solid #ffd700;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: pulse-glow 1.5s ease-in-out infinite;
+  background: linear-gradient(135deg, #fffacd 0%, #ffed4e 100%);
+
+  .player-name {
+    color: #333;
+    font-weight: 700;
+  }
+
+  .player-status {
+    color: #ff6b00;
+    background: rgba(255, 107, 0, 0.1);
+    font-weight: 700;
+  }
+}
+
+.turn-badge {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffd700;
+  color: #333;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6);
+  white-space: nowrap;
+  animation: bounce 0.6s ease-in-out infinite;
 }
 
 .player-avatar {
@@ -101,6 +130,12 @@
   font-size: 20px;
   font-weight: bold;
   margin: 0 auto;
+}
+
+.current-turn .avatar-placeholder {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #333;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
 }
 
 .main-player .avatar-placeholder {
@@ -124,11 +159,6 @@
   white-space: nowrap;
 }
 
-.main-player .player-name {
-  font-size: 16px;
-  color: white;
-}
-
 .player-status {
   margin: 4px 0 0 0;
   font-size: 12px;
@@ -142,6 +172,11 @@
   &.waiting {
     color: #ff9800;
   }
+
+  &.turn {
+    color: #ff6b00;
+    font-weight: 700;
+  }
 }
 
 .cards-count {
@@ -154,49 +189,27 @@
   color: #667eea;
 }
 
-.main-player .cards-count {
-  color: #ffd700;
-}
-
 .card-icon {
   font-size: 16px;
 }
 
-.turn-indicator {
-  position: absolute;
-  top: -12px;
-  right: -12px;
-  background: #ffd700;
-  color: #333;
-  padding: 4px 8px;
-  border-radius: 20px;
-  font-size: 10px;
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.turn-badge {
-  display: inline-block;
-  animation: rotate 2s infinite;
-}
-
-@keyframes pulse {
+@keyframes pulse-glow {
   0% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   50% {
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   100% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 }
 
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
+@keyframes bounce {
+  0%, 100% {
+    transform: translateX(-50%) translateY(0);
   }
-  100% {
-    transform: rotate(360deg);
+  50% {
+    transform: translateX(-50%) translateY(-8px);
   }
 }

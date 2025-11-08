@@ -7,18 +7,30 @@
         <span class="info-item"
           >PIN: <strong>{{ gameKey }}</strong></span
         >
+        <span class="info-item"
+          >Players: <strong>{{ players.length }}/6</strong></span
+        >
       </div>
     </div>
 
     <div class="header-center">
-      <div class="turn-display" *ngIf="currentTurnPlayerId">
-        <span class="turn-label">Current Turn:</span>
-        <span class="turn-player">Player</span>
+      <div class="game-status" [class]="'status-' + gameState">
+        <span class="status-label">{{
+          gameState === 'playing' ? '🎮 PLAYING' : '⏳ WAITING'
+        }}</span>
+      </div>
+
+      <div class="turn-display" *ngIf="gameState === 'playing' && currentTurnPlayerName">
+        <span class="turn-label">🎯 Turn:</span>
+        <span class="turn-player">{{ currentTurnPlayerName }}</span>
       </div>
     </div>
 
     <div class="header-right">
-      <button (click)="leaveGame()" class="btn btn-leave">Leave Game</button>
+      <button *ngIf="gameState === 'waiting'" (click)="playerReady()" class="btn btn-ready">
+        ✅ Ready
+      </button>
+      <button (click)="leaveGame()" class="btn btn-leave">🚪 Leave</button>
     </div>
   </div>
 
@@ -72,6 +84,7 @@
         class="username-input"
         (keyup.enter)="setUsername()"
         maxlength="20"
+        autofocus
       />
       <button (click)="setUsername()" class="btn btn-primary">Set Name</button>
     </div>

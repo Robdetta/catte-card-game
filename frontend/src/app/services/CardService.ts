@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 export interface CardFrame {
   filename: string;
@@ -8,7 +9,7 @@ export interface CardFrame {
 }
 
 export interface Card {
-  id: string; // e.g., "clubs2", "hearts10", "spadesAce"
+  id: string;
   filename: string;
   frame: { x: number; y: number; w: number; h: number };
 }
@@ -27,20 +28,29 @@ export class CardService {
   }
 
   private loadCards(): void {
-    this.http.get<any>('assets/cards.json').subscribe((data) => {
-      if (data.frames && Array.isArray(data.frames)) {
-        data.frames.forEach((frameData: any) => {
-          const card: Card = {
-            id: frameData.filename,
-            filename: frameData.filename,
-            frame: frameData.frame,
-          };
-          this.cardsData.set(frameData.filename, card);
-        });
-      }
-      this.cardsLoaded$.next(true);
-      console.log('Cards loaded:', this.cardsData.size);
-    });
+    this.http
+      .get<any>('assets/cards.json')
+      .pipe(
+        catchError((error) => {
+          console.error('Failed to load cards.json:', error);
+          this.cardsLoaded$.next(true);
+          return of(null);
+        })
+      )
+      .subscribe((data) => {
+        if (data && data.frames && Array.isArray(data.frames)) {
+          data.frames.forEach((frameData: any) => {
+            const card: Card = {
+              id: frameData.filename,
+              filename: frameData.filename,
+              frame: frameData.frame,
+            };
+            this.cardsData.set(frameData.filename, card);
+          });
+          console.log('Cards loaded:', this.cardsData.size);
+        }
+        this.cardsLoaded$.next(true);
+      });
   }
 
   getCard(cardId: string): Card | undefined {

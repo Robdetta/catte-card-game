@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class PlayerSlotComponent {
   @Input() player: any;
-  @Input() position: string = 'top'; // top, top-left, top-right, left, right, bottom
+  @Input() position: string = 'top';
   @Input() isCurrentTurn: boolean = false;
   @Input() isMainPlayer: boolean = false;
 
@@ -19,8 +19,8 @@ export class PlayerSlotComponent {
   }
 
   get playerStatus(): string {
-    if (this.isCurrentTurn) return 'Playing';
-    if (this.player?.isReady) return 'Ready';
-    return 'Waiting';
+    if (this.isCurrentTurn) return '🎯 TURN';
+    if (this.player?.isReady) return '✅ Ready';
+    return '⏳ Waiting';
   }
 }
