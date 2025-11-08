@@ -56,7 +56,9 @@ export default config({
   },
 
   beforeListen: () => {
-    console.log(`🎮 Server running in ${process.env.NODE_ENV || 'development'} mode`);
+    console.log(
+      `🎮 Server running in ${process.env.NODE_ENV || 'development'} mode`,
+    );
     console.log(`🌐 Port: ${process.env.PORT || 2567}`);
     console.log(`🔒 CORS Origin: ${process.env.CORS_ORIGIN || '*'}`);
   },
