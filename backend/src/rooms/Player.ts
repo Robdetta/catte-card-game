@@ -2,12 +2,12 @@ import { Schema, type } from '@colyseus/schema';
 
 export class Player extends Schema {
   @type('string') id: string;
-  @type('string') name: string;
+  @type('string') name: string = 'Player';
   @type(['string']) hand: string[] = [];
   @type('boolean') isTurn: boolean = false;
   @type('boolean') isBot: boolean = false;
-  @type('boolean')
-  isReady: boolean = false;
+  @type('boolean') isReady: boolean = false;
+  @type('number') seatPosition: number;
 
   @type('number') x: number = 0;
   @type('number') y: number = 0;

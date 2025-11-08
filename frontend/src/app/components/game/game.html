@@ -40,7 +40,6 @@
       <div class="played-cards">
         <h3>Played Cards</h3>
         <div class="cards-grid">
-          <!-- Cards will appear here -->
           <p class="empty-state">No cards played yet</p>
         </div>
       </div>
@@ -60,7 +59,7 @@
   </div>
 
   <!-- Username Input (if not set) -->
-  <div class="username-modal" *ngIf="!username">
+  <div class="username-modal" *ngIf="!usernameSet">
     <div class="modal-content">
       <h2>Enter Your Name</h2>
       <input
@@ -69,6 +68,7 @@
         placeholder="Enter your username"
         class="username-input"
         (keyup.enter)="setUsername()"
+        maxlength="20"
       />
       <button (click)="setUsername()" class="btn btn-primary">Set Name</button>
     </div>

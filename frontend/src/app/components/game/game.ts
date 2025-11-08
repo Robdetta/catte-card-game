@@ -16,13 +16,14 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class GameComponent implements OnInit, OnDestroy {
   gameKey: string | null = null;
-  roomId: string | null = null;
   players: any[] = [];
   username: string = '';
+  usernameSet: boolean = false;
   currentTurnPlayerId: string | null = null;
   currentPlayerSessionId: string | null = null;
   playedCards: any[] = [];
   notifications: string[] = [];
+  myHand: string[] = [];
 
   private destroy$ = new Subject<void>();
 
@@ -57,11 +58,6 @@ export class GameComponent implements OnInit, OnDestroy {
     this.colyseusService.players$.pipe(takeUntil(this.destroy$)).subscribe((players) => {
       this.players = players || [];
     });
-
-    // Subscribe to game key
-    this.colyseusService.gameKey$.pipe(takeUntil(this.destroy$)).subscribe((gameKey) => {
-      this.gameKey = gameKey;
-    });
   }
 
   private updateGameState(state: any): void {
@@ -70,7 +66,9 @@ export class GameComponent implements OnInit, OnDestroy {
     }
 
     if (state.gameState) {
-      this.addNotification(`Game state: ${state.gameState}`);
+      if (state.gameState === 'playing') {
+        this.addNotification('Game has started!');
+      }
     }
   }
 
@@ -82,14 +80,15 @@ export class GameComponent implements OnInit, OnDestroy {
 
     const room = this.colyseusService.getRoom();
     if (room) {
+      // Send username to backend
       room.send('setUsername', { username: this.username });
+      this.usernameSet = true;
       this.addNotification(`Your name is now: ${this.username}`);
     }
   }
 
   addNotification(message: string): void {
     this.notifications.unshift(message);
-    // Keep only last 5 notifications
     if (this.notifications.length > 5) {
       this.notifications.pop();
     }
