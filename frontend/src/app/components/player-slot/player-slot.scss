@@ -1,215 +1,87 @@
 .player-slot {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  position: absolute;
-}
-
-// Positioning for each slot
-.position-top {
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.position-top-left {
-  top: 15%;
-  left: 10%;
-  transform: rotate(-30deg);
-}
-
-.position-top-right {
-  top: 15%;
-  right: 10%;
-  transform: rotate(30deg);
-}
-
-.position-left {
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%) rotate(-90deg);
-}
-
-.position-right {
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%) rotate(90deg);
-}
-
-.position-bottom {
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.player-card {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  min-width: 120px;
-  text-align: center;
-  position: relative;
+  gap: 4px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
-  border: 2px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+  min-width: 70px;
 
   &:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
     transform: scale(1.05);
   }
-}
 
-.main-player .player-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: 3px solid #667eea;
-  min-width: 140px;
-  padding: 20px;
-
-  .player-name,
-  .player-status {
-    color: white;
+  &.current-turn {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: #ffd700;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
   }
 
-  .player-status {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
+  &.my-player {
+    background: rgba(76, 175, 80, 0.2);
+    border-color: #4caf50;
   }
-}
-
-// CURRENT TURN HIGHLIGHT
-.current-turn .player-card {
-  border: 3px solid #ffd700;
-  box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 4px 12px rgba(0, 0, 0, 0.1);
-  animation: pulse-glow 1.5s ease-in-out infinite;
-  background: linear-gradient(135deg, #fffacd 0%, #ffed4e 100%);
-
-  .player-name {
-    color: #333;
-    font-weight: 700;
-  }
-
-  .player-status {
-    color: #ff6b00;
-    background: rgba(255, 107, 0, 0.1);
-    font-weight: 700;
-  }
-}
-
-.turn-badge {
-  position: absolute;
-  top: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ffd700;
-  color: #333;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.6);
-  white-space: nowrap;
-  animation: bounce 0.6s ease-in-out infinite;
 }
 
 .player-avatar {
-  margin-bottom: 12px;
-}
-
-.avatar-placeholder {
-  width: 48px;
-  height: 48px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
   font-weight: bold;
-  margin: 0 auto;
-}
-
-.current-turn .avatar-placeholder {
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-  color: #333;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
-}
-
-.main-player .avatar-placeholder {
-  width: 60px;
-  height: 60px;
-  font-size: 24px;
-  background: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
 }
 
 .player-info {
-  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 0;
 }
 
 .player-name {
   margin: 0;
-  font-size: 14px;
   font-weight: 600;
-  color: #333;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: white;
+  font-size: 10px;
+  line-height: 1.2;
 }
 
-.player-status {
-  margin: 4px 0 0 0;
-  font-size: 12px;
-  color: #999;
-  font-weight: 500;
-
-  &.ready {
-    color: #4caf50;
-  }
-
-  &.waiting {
-    color: #ff9800;
-  }
-
-  &.turn {
-    color: #ff6b00;
-    font-weight: 700;
-  }
+.player-cards {
+  margin: 0;
+  font-size: 9px;
+  color: #ddd;
+  line-height: 1;
 }
 
-.cards-count {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #667eea;
+.turn-indicator {
+  font-size: 9px;
+  color: #ffd700;
+  font-weight: 700;
+  animation: pulse 1s infinite;
 }
 
-.card-icon {
-  font-size: 16px;
-}
-
-@keyframes pulse-glow {
-  0% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.9), 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+@keyframes pulse {
+  0%,
   100% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-}
-
-@keyframes bounce {
-  0%, 100% {
-    transform: translateX(-50%) translateY(0);
+    opacity: 1;
   }
   50% {
-    transform: translateX(-50%) translateY(-8px);
+    opacity: 0.6;
   }
 }

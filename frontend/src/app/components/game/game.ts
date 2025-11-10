@@ -162,4 +162,17 @@ export class GameComponent implements OnInit, OnDestroy {
     const positions = ['bottom', 'top', 'top-left', 'top-right', 'left', 'right'];
     return positions[index] || 'top';
   }
+
+  getOrderedPlayers(): any[] {
+    if (!this.currentPlayerSessionId || this.players.length === 0) {
+      return this.players;
+    }
+
+    // Put local player first, others follow
+    const me = this.players.find((p) => p.id === this.currentPlayerSessionId);
+    const others = this.players.filter((p) => p.id !== this.currentPlayerSessionId);
+
+    console.log('🎮 Local player:', me?.name);
+    return me ? [me, ...others] : this.players;
+  }
 }
