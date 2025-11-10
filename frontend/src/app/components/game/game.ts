@@ -168,11 +168,11 @@ export class GameComponent implements OnInit, OnDestroy {
       return this.players;
     }
 
-    // Put local player first, others follow
+    // Put local player LAST (for bottom position)
     const me = this.players.find((p) => p.id === this.currentPlayerSessionId);
     const others = this.players.filter((p) => p.id !== this.currentPlayerSessionId);
 
-    console.log('🎮 Local player:', me?.name);
-    return me ? [me, ...others] : this.players;
+    console.log('🎮 Local player last:', me?.name);
+    return me ? [...others, me] : this.players;
   }
 }

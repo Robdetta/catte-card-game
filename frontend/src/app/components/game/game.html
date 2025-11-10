@@ -41,9 +41,8 @@
       @for (player of getOrderedPlayers(); track player.id; let i = $index) {
       <app-player-slot
         [player]="player"
-        [position]="getPositionForIndex(i)"
+        [class.local-player]="player.id === currentPlayerSessionId"
         [isCurrentTurn]="isCurrentTurn(player.id)"
-        [isMainPlayer]="i === 0"
       >
       </app-player-slot>
       }

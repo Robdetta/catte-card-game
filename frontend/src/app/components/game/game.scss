@@ -289,59 +289,54 @@
     transform: translateY(0);
   }
 }
-// Position 1: TOP
-app-player-slot:nth-child(1) {
+/ Default positioning for first 5 players app-player-slot {
   position: absolute;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-}
 
-// Position 2: LEFT-TOP
-app-player-slot:nth-child(2) {
-  position: absolute;
-  left: 0;
-  top: 30%;
-  transform: translateY(-50%);
-  z-index: 4;
-}
+  &:nth-child(1) {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+  }
 
-// Position 3: LEFT-BOTTOM
-app-player-slot:nth-child(3) {
-  position: absolute;
-  left: 0;
-  top: 70%;
-  transform: translateY(-50%);
-  z-index: 4;
-}
+  &:nth-child(2) {
+    left: 10px;
+    top: 30%;
+    transform: translateY(-50%);
+    z-index: 4;
+  }
 
-// Position 4: RIGHT-TOP
-app-player-slot:nth-child(4) {
-  position: absolute;
-  right: 0;
-  top: 30%;
-  transform: translateY(-50%);
-  z-index: 4;
-}
+  &:nth-child(3) {
+    left: 10px;
+    top: 70%;
+    transform: translateY(-50%);
+    z-index: 4;
+  }
 
-// Position 5: RIGHT-BOTTOM
-app-player-slot:nth-child(5) {
-  position: absolute;
-  right: 0;
-  top: 70%;
-  transform: translateY(-50%);
-  z-index: 4;
-}
+  &:nth-child(4) {
+    right: 10px;
+    top: 30%;
+    transform: translateY(-50%);
+    z-index: 4;
+  }
 
-// Position 6: BOTTOM (LOCAL PLAYER) - swapped from position 1
-app-player-slot:nth-child(6) {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-}
+  &:nth-child(5) {
+    right: 10px;
+    top: 70%;
+    transform: translateY(-50%);
+    z-index: 4;
+  }
+
+  // Local player ALWAYS at bottom (regardless of nth-child or player count)
+  &.local-player {
+    bottom: 20px !important;
+    left: 50% !important;
+    top: auto !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    z-index: 5 !important;
+  }
+
 
 // Desktop: Show all 6 in a circle
 @media (min-width: 1025px) {
@@ -354,49 +349,61 @@ app-player-slot:nth-child(6) {
     position: relative;
   }
 
-  app-player-slot:nth-child(1) {
-    top: -50px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-  }
+  app-player-slot {
+    &:nth-child(1) {
+      top: -50px;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+    }
 
-  app-player-slot:nth-child(2) {
-    top: 50%;
-    left: -50px;
-    right: auto;
-    transform: translateY(-50%);
-  }
+    &:nth-child(2) {
+      top: 50%;
+      left: -50px;
+      right: auto;
+      transform: translateY(-50%);
+    }
 
-  app-player-slot:nth-child(3) {
-    top: 50%;
-    right: -50px;
-    left: auto;
-    transform: translateY(-50%);
-  }
+    &:nth-child(3) {
+      top: 50%;
+      right: -50px;
+      left: auto;
+      transform: translateY(-50%);
+    }
 
-  app-player-slot:nth-child(4) {
-    bottom: -50px;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-  }
+    &:nth-child(4) {
+      bottom: -50px;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+    }
 
-  app-player-slot:nth-child(5) {
-    display: block;
-    top: 15%;
-    left: 15%;
-    bottom: auto;
-    right: auto;
-    transform: none;
-  }
+    &:nth-child(5) {
+      display: block;
+      top: 15%;
+      left: 15%;
+      bottom: auto;
+      right: auto;
+      transform: none;
+    }
 
-  app-player-slot:nth-child(6) {
-    display: block;
-    top: 15%;
-    right: 15%;
-    bottom: auto;
-    left: auto;
-    transform: none;
+    &:nth-child(6) {
+      display: block;
+      top: 15%;
+      right: 15%;
+      bottom: auto;
+      left: auto;
+      transform: none;
+    }
+
+    // Local player ALWAYS at bottom on desktop too
+    &.local-player {
+      bottom: -50px !important;
+      left: 50% !important;
+      top: auto !important;
+      right: auto !important;
+      transform: translateX(-50%) !important;
+      z-index: 5 !important;
+    }
   }
 }
